@@ -1,6 +1,7 @@
 const form = document.getElementById('form');
 const username = document.getElementById('username');
 const email = document.getElementById('email');
+const phone = document.getElementById('phone');
 const password = document.getElementById('password');
 const repassword = document.getElementById('repassword');
 
@@ -20,26 +21,64 @@ function CheckEmail(input) {
     if (re.test(input.value)) {
         Success(input);
     } else {
-        Error(input, 'You  Entered an Incorrect E-mail. Please Enter Your E-Mail Correctly!');
+        Error(input, 'You  entered an incorrect e-mail. Please enter your e-mail correctly!');
     }
 }
 
-function CheckRequired(inputs){
-    inputs.forEach(function(input){
-        if(input.value=== ''){
+function CheckRequired(inputs) {
+    inputs.forEach(function (input) {
+        if (input.value === '') {
             Error(input, `${input.id} is required!`);
-        }else{
+        } else {
             Success(input);
         }
     })
-   
+
 }
+function CheckLength(input, min, max) {
+    if (input.value.length < min) {
+        Error(input, ` The ${input.id} must be at least ${min} characters!`)
+    } else if (input.value.length > max) {
+        Error(input, ` The ${input.id} must be up to ${max} characters!`)
+    } else {
+        Success(input);
+    }
+
+}
+function CheckPasswords(input1, input2) {
+    if (input1.value !== input2.value) {
+        Error(input2, 'The passwords were not matched. Please make sure to enter the same passwords!')
+        input1.classList.add('is-invalid');
+        const div = input1.nextElementSibling;
+        div.innerText = 'The passwords were not matched. Please make sure to enter the same passwords!' ;
+        div.className = 'invalid-feedback';
+    }
+
+}
+function CheckPhone(input){
+    
+    var exp = /^\d{10}$/;   
+    if(!exp.test(input.value)) 
+       {Error(input, 'The phone number must be 10 characters! Do not enter  more or less here!');}
+
+   
+    
+    
+    
+}
+
+
 
 
 
 form.addEventListener('submit', function (e) {
-    e.preventDefault();
+    
 
-   CheckRequired([username , email , password , repassword]);
-   CheckEmail(email);
+
+    CheckRequired([username, email, phone, password, repassword]);
+    CheckEmail(email);
+    CheckLength(username, 5, 20);
+    CheckPasswords(password, repassword);
+    CheckPhone(phone);
+    e.preventDefault();
 });
